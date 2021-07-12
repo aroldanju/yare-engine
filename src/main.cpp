@@ -22,18 +22,17 @@
 #include <label.h>
 #include <assetmanager.h>
 #include <map.h>
+#include <player.h>
 
 #include <iostream>
 #include <chrono>
 #include <sstream>
-#include "player.h"
 
 int main(int argc, char *argv[]) {
 	SdlRenderer renderer;
 	SdlEventHandler eventHandler;
 	AssetManager assetManager;
 	Player player;
-	Ray ray;
 
 	bool quit = false;
 	uint32_t fps = 0;
@@ -87,12 +86,10 @@ int main(int argc, char *argv[]) {
 		map.draw(renderer);
 		player.draw(renderer);
 		labelFps.draw(renderer, (Position) {0, 0});
-		renderer.setColor(255, 0, 0);
-		renderer.drawLine(player.getPosition().x, player.getPosition().y, ray.position.x, ray.position.y);
 		renderer.render();
 
-		ray = player.raycast(map);
 		player.update(map);
+		player.raycast(map);
 
 		SDL_Delay(1);
 		uint32_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - timeFrameStart).count();

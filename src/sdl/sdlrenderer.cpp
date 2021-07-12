@@ -53,7 +53,7 @@ bool SdlRenderer::initialize(const std::string& title, uint32_t width, uint32_t 
 	}
 
     SDL_RenderSetLogicalSize(this->renderer, width, height);
-	//SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_MUL);
+	SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_ADD);
 
     return (this->renderer != nullptr && this->window != nullptr);
 }

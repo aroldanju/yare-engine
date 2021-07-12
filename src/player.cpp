@@ -17,6 +17,7 @@
  */
 
 #include <cmath>
+#include <iostream>
 #include "player.h"
 #include "definitions.h"
 
@@ -28,7 +29,7 @@ Player::Player() :
 	rotating(0.0f),
 	velocityMove(8.0f),
 	velocityRotate(3.0f * (M_PI / 180.0f)),
-	fov(60.0f)
+	fov(60.0f * (M_PI / 180.0f))
 {
 
 }
@@ -105,21 +106,50 @@ void Player::draw(Renderer& renderer)	{
 	// Player
 	renderer.setColor(0, 255, 0);
 	renderer.drawRect((int)(this->position.x - 4.0f), (int)(this->position.y - 4.0f), 8, 8);
+
+	// Last raycast
+	if (!this->lastRaycast.empty()) {
+		renderer.setColor(128, 128, 128, 64);
+		for (auto& ray : this->lastRaycast) {
+			renderer.drawLine(this->position.x, this->position.y, ray.position.x, ray.position.y);
+		}
+	}
 }
 
-Ray Player::raycast(const Map &map) {
+void Player::raycast(const Map &map) {
+	const float fovVariation = this->fov / SCREEN_WIDTH;
+
+	//auto start = std::chrono::steady_clock::now();
+
+	lastRaycast.clear();
+	for (uint32_t i = 0; i < SCREEN_WIDTH; i++) {
+		lastRaycast.push_back(singleRaycast(map, fovVariation * i));
+	}
+
+	//const uint32_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - start).count();
+	//std::cout << "Elapsed: " << elapsed << "ms" << std::endl;
+}
+
+Ray Player::singleRaycast(const Map &map, float variation) {
 
 	// TODO use triangles to improve performance
 
 	const uint32_t iterations = 4096;
+	const float fovMiddle = this->fov / 2.0f;
+	const float rayAngle = this->angle - fovMiddle + variation;
 
 	for (int i = 0; i < iterations; i++) {
-		float x = this->position.x + std::cos(this->angle) * i;
-		float y = this->position.y + std::sin(this->angle) * i;
+		float x = this->position.x + std::cos(rayAngle) * i;
+		float y = this->position.y + std::sin(rayAngle) * i;
 		if (map.checkCollision(x / TILE_SIZE, y / TILE_SIZE)) {
-			return (Ray){ (Position){x, y}, this->angle };
+			return (Ray){ (Position){x, y}, rayAngle, (int)std::floor(x) % TILE_SIZE == 0 };
 		}
 	}
 
 	return (Ray){ (Position){-1.0f, -1.0f}, 0.0f };
+}
+
+
+const std::vector<Ray>& Player::getLastRaycast() const {
+	return this->lastRaycast;
 }

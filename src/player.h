@@ -19,6 +19,8 @@
 #ifndef __YARE_PLAYER_H
 #define __YARE_PLAYER_H
 
+#include <vector>
+
 #include "rect.h"
 #include "map.h"
 
@@ -44,7 +46,10 @@ public:
 
 	void draw(Renderer& renderer);
 
-	Ray raycast(const Map &map);
+	void raycast(const Map &map);
+	Ray singleRaycast(const Map &map, float );
+
+	const std::vector<Ray>& getLastRaycast() const;
 
 private:
 	Position position;
@@ -53,6 +58,7 @@ private:
 	float moving, rotating;
 	float velocityMove, velocityRotate;
 	float fov;
+	std::vector<Ray> lastRaycast;
 
 };
 

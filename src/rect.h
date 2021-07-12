@@ -37,6 +37,7 @@ typedef struct _rect {
 typedef struct _ray {
 	Position position;
 	float angle;
+	bool x;
 } Ray;
 
 #endif // __YARE_RECT_H
