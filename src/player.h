@@ -16,15 +16,42 @@
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __YARE_DEFINITIONS_H
-#define __YARE_DEFINITIONS_H
+#ifndef __YARE_PLAYER_H
+#define __YARE_PLAYER_H
 
-#define FPS				60
-#define FPS_DELAY		(1000/FPS)
+#include "rect.h"
+#include "map.h"
 
-#define TILE_SIZE   	64
+class Player {
+public:
+	Player();
+	virtual ~Player() = default;
 
-#define SCREEN_WIDTH	400
-#define SCREEN_HEIGHT	300
+	void setPosition(const Position &position);
 
-#endif // __YARE_DEFINITIONS_H
+	void ahead();
+	void back();
+	void left();
+	void right();
+	void stopMoving();
+	void stopRotating();
+
+	void update(const Map &map);
+
+	const Position& getPosition() const;
+
+	float getAngle() const;
+
+	void draw(Renderer& renderer);
+
+private:
+	Position position;
+	Position tilePosition;
+	float angle;
+	float moving, rotating;
+	float velocityMove, velocityRotate;
+
+};
+
+
+#endif // __YARE_PLAYER_H

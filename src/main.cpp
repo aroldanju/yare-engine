@@ -19,22 +19,29 @@
 #include <sdl/sdlfont.h>
 #include <sdl/sdlrenderer.h>
 #include <sdl/sdleventhandler.h>
-
 #include <label.h>
+#include <assetmanager.h>
+#include <map.h>
 
 #include <iostream>
 #include <chrono>
 #include <sstream>
-#include "assetmanager.h"
+#include "player.h"
 
 int main(int argc, char *argv[]) {
 	SdlRenderer renderer;
 	SdlEventHandler eventHandler;
 	AssetManager assetManager;
+	Player player;
 
 	bool quit = false;
 	uint32_t fps = 0;
 	auto timeStart = std::chrono::steady_clock::now();
+
+	Map map;
+	map.loadFromFile("../assets/map.map");
+
+	player.setPosition((Position){TILE_SIZE + TILE_SIZE / 2, TILE_SIZE + TILE_SIZE /2});
 
 	renderer.initialize("Yare", SCREEN_WIDTH, SCREEN_HEIGHT);
 
@@ -50,6 +57,24 @@ int main(int argc, char *argv[]) {
 		quit = true;
 	});
 
+	eventHandler.setOnKeyDownListener([&](EventHandler::Key_t key) -> void {
+		switch (key) {
+			case EventHandler::KEY_RIGHT: player.right(); break;
+			case EventHandler::KEY_LEFT: player.left(); break;
+			case EventHandler::KEY_UP: player.ahead(); break;
+			case EventHandler::KEY_DOWN: player.back(); break;
+		}
+	});
+
+	eventHandler.setOnKeyUpListener([&](EventHandler::Key_t key) -> void {
+		switch (key) {
+			case EventHandler::KEY_RIGHT: player.stopRotating(); break;
+			case EventHandler::KEY_LEFT: player.stopRotating(); break;
+			case EventHandler::KEY_UP: player.stopMoving(); break;
+			case EventHandler::KEY_DOWN: player.stopMoving(); break;
+		}
+	});
+
 	timeStart = std::chrono::steady_clock::now();
 
 	while (!quit) {
@@ -58,8 +83,12 @@ int main(int argc, char *argv[]) {
 		eventHandler.handle();
 
 		renderer.clear();
+		map.draw(renderer);
+		player.draw(renderer);
 		labelFps.draw(renderer, (Position) {0, 0});
 		renderer.render();
+
+		player.update(map);
 
 		SDL_Delay(1);
 		uint32_t elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - timeFrameStart).count();
