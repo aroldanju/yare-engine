@@ -44,12 +44,15 @@ public:
 
 	void draw(Renderer& renderer);
 
+	Ray raycast(const Map &map);
+
 private:
 	Position position;
 	Position tilePosition;
 	float angle;
 	float moving, rotating;
 	float velocityMove, velocityRotate;
+	float fov;
 
 };
 

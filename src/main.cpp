@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
 	SdlEventHandler eventHandler;
 	AssetManager assetManager;
 	Player player;
+	Ray ray;
 
 	bool quit = false;
 	uint32_t fps = 0;
@@ -86,8 +87,11 @@ int main(int argc, char *argv[]) {
 		map.draw(renderer);
 		player.draw(renderer);
 		labelFps.draw(renderer, (Position) {0, 0});
+		renderer.setColor(255, 0, 0);
+		renderer.drawLine(player.getPosition().x, player.getPosition().y, ray.position.x, ray.position.y);
 		renderer.render();
 
+		ray = player.raycast(map);
 		player.update(map);
 
 		SDL_Delay(1);

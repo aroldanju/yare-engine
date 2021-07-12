@@ -27,7 +27,8 @@ Player::Player() :
 	moving(0.0f),
 	rotating(0.0f),
 	velocityMove(8.0f),
-	velocityRotate(3.0f * (M_PI / 180.0f))
+	velocityRotate(3.0f * (M_PI / 180.0f)),
+	fov(60.0f)
 {
 
 }
@@ -104,4 +105,21 @@ void Player::draw(Renderer& renderer)	{
 	// Player
 	renderer.setColor(0, 255, 0);
 	renderer.drawRect((int)(this->position.x - 4.0f), (int)(this->position.y - 4.0f), 8, 8);
+}
+
+Ray Player::raycast(const Map &map) {
+
+	// TODO use triangles to improve performance
+
+	const uint32_t iterations = 4096;
+
+	for (int i = 0; i < iterations; i++) {
+		float x = this->position.x + std::cos(this->angle) * i;
+		float y = this->position.y + std::sin(this->angle) * i;
+		if (map.checkCollision(x / TILE_SIZE, y / TILE_SIZE)) {
+			return (Ray){ (Position){x, y}, this->angle };
+		}
+	}
+
+	return (Ray){ (Position){-1.0f, -1.0f}, 0.0f };
 }
