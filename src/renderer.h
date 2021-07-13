@@ -36,6 +36,7 @@ public:
     virtual void drawLine(int x0, int y0, int x1, int y1) = 0;
     virtual void drawRect(int x, int y, int w, int h) = 0;
 
+    virtual void setBlendMode(int mode) = 0;
 };
 
 #endif // __YARE_RENDERER_H

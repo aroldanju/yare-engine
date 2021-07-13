@@ -20,18 +20,18 @@
 #include <iostream>
 #include "player.h"
 #include "definitions.h"
+#include "map.h"
 
 Player::Player() :
 	position((Position){ 0.0f, 0.0f }),
 	tilePosition((Position){ 0.0f, 0.0f }),
-	angle(0.0f),
+	angle(0.0f * (M_PI / 180.0f)),
 	moving(0.0f),
 	rotating(0.0f),
 	velocityMove(8.0f),
 	velocityRotate(3.0f * (M_PI / 180.0f)),
 	fov(60.0f * (M_PI / 180.0f))
 {
-
 }
 
 void Player::setPosition(const Position &position)	{
@@ -116,6 +116,10 @@ void Player::draw(Renderer& renderer)	{
 	}
 }
 
+float Player::getFov() const {
+	return this->fov;
+}
+
 void Player::raycast(const Map &map) {
 	const float fovVariation = this->fov / SCREEN_WIDTH;
 
@@ -139,10 +143,15 @@ Ray Player::singleRaycast(const Map &map, float variation) {
 	const float rayAngle = this->angle - fovMiddle + variation;
 
 	for (int i = 0; i < iterations; i++) {
-		float x = this->position.x + std::cos(rayAngle) * i;
-		float y = this->position.y + std::sin(rayAngle) * i;
+		float x = this->position.x + std::cos(rayAngle) * (float)i;
+		float y = this->position.y + std::sin(rayAngle) * (float)i;
 		if (map.checkCollision(x / TILE_SIZE, y / TILE_SIZE)) {
-			return (Ray){ (Position){x, y}, rayAngle, (int)std::floor(x) % TILE_SIZE == 0 };
+			// FIXME not working
+			bool collideX = (int)std::floor(x) % TILE_SIZE != 0;
+			return (Ray){ (Position){x, y},
+				 rayAngle,
+				 collideX
+			};
 		}
 	}
 

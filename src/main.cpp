@@ -19,10 +19,12 @@
 #include <sdl/sdlfont.h>
 #include <sdl/sdlrenderer.h>
 #include <sdl/sdleventhandler.h>
+#include <sdl/sdltexture.h>
 #include <label.h>
 #include <assetmanager.h>
 #include <map.h>
 #include <player.h>
+#include <scene.h>
 
 #include <iostream>
 #include <chrono>
@@ -34,12 +36,15 @@ int main(int argc, char *argv[]) {
 	AssetManager assetManager;
 	Player player;
 
+	bool showMap = false;
 	bool quit = false;
 	uint32_t fps = 0;
 	auto timeStart = std::chrono::steady_clock::now();
 
 	Map map;
 	map.loadFromFile("../assets/map.map");
+
+	Scene scene((Size){SCREEN_WIDTH, SCREEN_HEIGHT}, map, player);
 
 	player.setPosition((Position){TILE_SIZE + TILE_SIZE / 2, TILE_SIZE + TILE_SIZE /2});
 
@@ -48,6 +53,10 @@ int main(int argc, char *argv[]) {
 	std::unique_ptr<Font> font = std::unique_ptr<Font>(new SdlFont());
 	font->loadFromFile("../assets/PIXEARG_.TTF", 8);
 	assetManager.addFont(0, font);
+
+	std::unique_ptr<Texture> texture = std::unique_ptr<Texture>(new SdlTexture());
+	texture->loadFromFile("../assets/bricks.bmp");
+	assetManager.addTexture(0, texture);
 
 	Label labelFps(assetManager.getFont(0));
 	labelFps.setCaption("FPS 60");
@@ -63,6 +72,7 @@ int main(int argc, char *argv[]) {
 			case EventHandler::KEY_LEFT: player.left(); break;
 			case EventHandler::KEY_UP: player.ahead(); break;
 			case EventHandler::KEY_DOWN: player.back(); break;
+			case EventHandler::KEY_TAB: showMap = !showMap; break;
 		}
 	});
 
@@ -83,8 +93,13 @@ int main(int argc, char *argv[]) {
 		eventHandler.handle();
 
 		renderer.clear();
-		map.draw(renderer);
-		player.draw(renderer);
+
+		scene.draw(renderer);
+
+		if(showMap) {
+			map.draw(renderer, player);
+		}
+
 		labelFps.draw(renderer, (Position) {0, 0});
 		renderer.render();
 

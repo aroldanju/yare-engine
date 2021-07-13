@@ -19,14 +19,21 @@
 #ifndef __YARE_SCENE_H
 #define __YARE_SCENE_H
 
+#include "map.h"
+#include "player.h"
+#include "assetmanager.h"
+
 class Scene {
 public:
-	Scene(Map &map, Player &player);
+	Scene(Size viewport, Map &map, Player &player);
 	virtual ~Scene() = default;
+
+	void draw(Renderer &renderer);
 
 private:
 	Map &map;
 	Player &player;
+	Size viewport;
 };
 
 #endif // __YARE_SCENE_H

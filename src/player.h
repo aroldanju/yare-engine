@@ -22,7 +22,9 @@
 #include <vector>
 
 #include "rect.h"
-#include "map.h"
+#include "renderer.h"
+
+class Map;
 
 class Player {
 public:
@@ -50,6 +52,8 @@ public:
 	Ray singleRaycast(const Map &map, float );
 
 	const std::vector<Ray>& getLastRaycast() const;
+
+	float getFov() const;
 
 private:
 	Position position;

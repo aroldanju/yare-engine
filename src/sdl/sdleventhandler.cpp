@@ -33,6 +33,9 @@ void SdlEventHandler::handle() {
 			else if (this->event.key.keysym.sym == SDLK_DOWN) {
 				onKeyDown(KEY_DOWN);
 			}
+			else if (this->event.key.keysym.sym == SDLK_TAB) {
+				onKeyDown(KEY_TAB);
+			}
 		}
 		else if (this->event.type == SDL_KEYUP) {
 			if (this->event.key.keysym.sym == SDLK_LEFT) {
@@ -46,6 +49,9 @@ void SdlEventHandler::handle() {
 			}
 			else if (this->event.key.keysym.sym == SDLK_DOWN) {
 				onKeyUp(KEY_DOWN);
+			}
+			else if (this->event.key.keysym.sym == SDLK_TAB) {
+				onKeyUp(KEY_TAB);
 			}
 		}
 		else if (this->event.type== SDL_QUIT) {

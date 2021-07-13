@@ -44,6 +44,8 @@ public:
 
     SDL_Renderer* getRenderer() { return this->renderer; }
 
+    void setBlendMode(int mode) override;
+
 private:
     SDL_Window *window;
     SDL_Renderer *renderer;

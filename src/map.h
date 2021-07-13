@@ -23,6 +23,7 @@
 #include <fstream>
 #include "renderer.h"
 #include "rect.h"
+#include "player.h"
 
 class Map
 {
@@ -44,7 +45,8 @@ public:
 	uint16_t getTile(uint32_t x, uint32_t y) const;
 
 	bool loadFromFile(const std::string& filename);
-	void draw(Renderer& renderer);
+
+	void draw(Renderer& renderer, const Player &player);
 
 private:
 	uint32_t width, height;

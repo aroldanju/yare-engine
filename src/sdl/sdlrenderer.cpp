@@ -17,6 +17,7 @@
  */
 
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_blendmode.h>
 #include "sdlrenderer.h"
 
 SdlRenderer::SdlRenderer() :
@@ -84,4 +85,14 @@ void SdlRenderer::drawRect(int x, int y, int w, int h) {
 
 void SdlRenderer::setColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
     SDL_SetRenderDrawColor(this->renderer, r, g, b, a);
+}
+
+void SdlRenderer::setBlendMode(int mode) {
+	SDL_BlendMode sdlBlendMode;
+	switch (mode) {
+		case 1: sdlBlendMode = SDL_BLENDMODE_MUL; break;
+		default:
+		case 0: sdlBlendMode = SDL_BLENDMODE_ADD; break;
+	}
+	SDL_SetRenderDrawBlendMode(this->renderer, sdlBlendMode);
 }

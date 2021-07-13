@@ -22,6 +22,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <cmath>
 
 Map::Map(uint32_t width, uint32_t height) :
 	width(width), height(height),
@@ -123,10 +124,11 @@ bool Map::loadFromFile(const std::string& filename)	{
 	return true;
 }
 
-void Map::draw(Renderer& renderer)	{
-
+void Map::draw(Renderer& renderer, const Player &player)	{
+	// FIXME
 
 	// Grid
+	/*
 	renderer.setColor(32, 32, 32);
 	for (int i = 0; i < this->width; i++) {
 		renderer.drawLine(i * TILE_SIZE, 0, i * TILE_SIZE, this->height * TILE_SIZE);
@@ -134,6 +136,7 @@ void Map::draw(Renderer& renderer)	{
 	for (int i = 0; i < this->height; i++) {
 		renderer.drawLine(0, i * TILE_SIZE, this->width * TILE_SIZE, i * TILE_SIZE);
 	}
+	*/
 
 
 	// Map
@@ -142,8 +145,38 @@ void Map::draw(Renderer& renderer)	{
 		const uint32_t row = i / this->height;
 		const uint32_t tile = this->tiles[row * this->width + column];
 		if (tile != 0) {
-			renderer.setColor(128, 128, 128);
-			renderer.drawRect((int)(column * TILE_SIZE), (int)(row * TILE_SIZE), TILE_SIZE, TILE_SIZE);
+			renderer.setColor(128, 128, 128, 255);
+			renderer.drawRect(
+					(int)(column * 16) + (int)player.getPosition().x / 16,
+					(int)(row * 16) + (int)player.getPosition().y / 16,
+					16, 16
+			);
 		}
 	}
+
+	// Direction
+	renderer.setColor(128, 128, 128, 255);
+	renderer.drawLine(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, SCREEN_WIDTH / 2 + std::cos(player.getAngle()) * 20.0f, SCREEN_HEIGHT / 2 + std::sin(player.getAngle()) * 20.0f);
+
+	/*
+	// Triangle (x, y)
+	renderer.setColor(0, 128, 0);
+	renderer.drawLine(this->position.x, this->position.y, this->position.x + std::cos(this->angle) * 20.0f, this->position.y);
+	renderer.setColor(0, 0, 128);
+	renderer.drawLine(this->position.x, this->position.y, this->position.x, this->position.y + std::sin(this->angle) * 20.0f);
+	*/
+
+	// Player
+	renderer.setColor(0, 255, 0, 255);
+	renderer.drawRect(SCREEN_WIDTH / 2 - 4, SCREEN_HEIGHT / 2 - 4, 8, 8);
+
+	/*
+	// Last raycast
+	if (!player.getLastRaycast().empty()) {
+		renderer.setColor(128, 128, 128, 64);
+		for (auto& ray : this->lastRaycast) {
+			renderer.drawLine(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, ray.position.x, ray.position.y);
+		}
+	}
+	*/
 }
