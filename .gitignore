@@ -4,3 +4,10 @@
 # CMake
 cmake-build-*/
 
+# obj & builds
+obj/
+build/
+
+# Codeblocks
+codeblocks/*.depend
+codeblocks/*.layout

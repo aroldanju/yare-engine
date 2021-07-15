@@ -45,6 +45,7 @@ public:
     SDL_Renderer* getRenderer() { return this->renderer; }
 
     void setBlendMode(int mode) override;
+    void drawGradient(int x, int y, int w, int h, uint8_t r0, uint8_t g0, uint8_t b0, uint8_t r1, uint8_t g1, uint8_t b1) override;
 
 private:
     SDL_Window *window;

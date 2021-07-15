@@ -28,7 +28,7 @@ public:
 	Scene(Size viewport, Map &map, Player &player);
 	virtual ~Scene() = default;
 
-	void draw(Renderer &renderer);
+	void draw(Renderer &renderer, AssetManager &assetManager);
 
 private:
 	Map &map;

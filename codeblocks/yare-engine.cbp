@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="yare-engine" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="../build/debug/yare-engine" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../build/debug/" />
+				<Option object_output="../obj/debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="../build/release/yare-engine" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../build/release/" />
+				<Option object_output="../obj/release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+			<Add directory="../src" />
+		</Compiler>
+		<Linker>
+			<Add option="-lSDL2" />
+			<Add option="-lSDL2_ttf" />
+		</Linker>
+		<Unit filename="../src/assetmanager.cpp" />
+		<Unit filename="../src/assetmanager.h" />
+		<Unit filename="../src/color.h" />
+		<Unit filename="../src/definitions.h" />
+		<Unit filename="../src/eventhandler.h" />
+		<Unit filename="../src/font.h" />
+		<Unit filename="../src/label.cpp" />
+		<Unit filename="../src/label.h" />
+		<Unit filename="../src/main.cpp" />
+		<Unit filename="../src/map.cpp" />
+		<Unit filename="../src/map.h" />
+		<Unit filename="../src/player.cpp" />
+		<Unit filename="../src/player.h" />
+		<Unit filename="../src/rect.h" />
+		<Unit filename="../src/renderer.h" />
+		<Unit filename="../src/scene.cpp" />
+		<Unit filename="../src/scene.h" />
+		<Unit filename="../src/sdl/sdleventhandler.cpp" />
+		<Unit filename="../src/sdl/sdleventhandler.h" />
+		<Unit filename="../src/sdl/sdlfont.cpp" />
+		<Unit filename="../src/sdl/sdlfont.h" />
+		<Unit filename="../src/sdl/sdlrenderer.cpp" />
+		<Unit filename="../src/sdl/sdlrenderer.h" />
+		<Unit filename="../src/sdl/sdltexture.cpp" />
+		<Unit filename="../src/sdl/sdltexture.h" />
+		<Unit filename="../src/texture.h" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>

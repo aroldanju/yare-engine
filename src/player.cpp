@@ -121,12 +121,15 @@ float Player::getFov() const {
 }
 
 void Player::raycast(const Map &map) {
-	const float fovVariation = this->fov / SCREEN_WIDTH;
+
+    const uint32_t rays = SCREEN_WIDTH;
+
+	const float fovVariation = this->fov / rays;
 
 	//auto start = std::chrono::steady_clock::now();
 
 	lastRaycast.clear();
-	for (uint32_t i = 0; i < SCREEN_WIDTH; i++) {
+	for (uint32_t i = 0; i < rays; i++) {
 		lastRaycast.push_back(singleRaycast(map, fovVariation * i));
 	}
 
@@ -145,9 +148,15 @@ Ray Player::singleRaycast(const Map &map, float variation) {
 	for (int i = 0; i < iterations; i++) {
 		float x = this->position.x + std::cos(rayAngle) * (float)i;
 		float y = this->position.y + std::sin(rayAngle) * (float)i;
+
 		if (map.checkCollision(x / TILE_SIZE, y / TILE_SIZE)) {
-			// FIXME not working
 			bool collideX = (int)std::floor(x) % TILE_SIZE != 0;
+			// Ray to left?
+			if (collideX && rayAngle > M_PI / 2.0f && rayAngle < 3.0 * M_PI / 2.0) {
+                x += 1.0f;
+                collideX = (int)std::floor(x) % TILE_SIZE != 0;
+			}
+
 			return (Ray){ (Position){x, y},
 				 rayAngle,
 				 collideX

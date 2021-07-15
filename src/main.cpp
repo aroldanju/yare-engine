@@ -42,7 +42,7 @@ int main(int argc, char *argv[]) {
 	auto timeStart = std::chrono::steady_clock::now();
 
 	Map map;
-	map.loadFromFile("../assets/map.map");
+	map.loadFromFile("../../assets/map.map");
 
 	Scene scene((Size){SCREEN_WIDTH, SCREEN_HEIGHT}, map, player);
 
@@ -51,11 +51,11 @@ int main(int argc, char *argv[]) {
 	renderer.initialize("Yare", SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	std::unique_ptr<Font> font = std::unique_ptr<Font>(new SdlFont());
-	font->loadFromFile("../assets/PIXEARG_.TTF", 8);
+	font->loadFromFile("../../assets/PIXEARG_.TTF", 8);
 	assetManager.addFont(0, font);
 
 	std::unique_ptr<Texture> texture = std::unique_ptr<Texture>(new SdlTexture());
-	texture->loadFromFile("../assets/bricks.bmp");
+	texture->loadFromFile("../../assets/bricks.bmp");
 	assetManager.addTexture(0, texture);
 
 	Label labelFps(assetManager.getFont(0));
@@ -94,7 +94,7 @@ int main(int argc, char *argv[]) {
 
 		renderer.clear();
 
-		scene.draw(renderer);
+		scene.draw(renderer, assetManager);
 
 		if(showMap) {
 			map.draw(renderer, player);

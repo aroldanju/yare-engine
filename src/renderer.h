@@ -37,6 +37,8 @@ public:
     virtual void drawRect(int x, int y, int w, int h) = 0;
 
     virtual void setBlendMode(int mode) = 0;
+
+    virtual void drawGradient(int x, int y, int w, int h, uint8_t r0, uint8_t g0, uint8_t b0, uint8_t r1, uint8_t g1, uint8_t b1) = 0;
 };
 
 #endif // __YARE_RENDERER_H

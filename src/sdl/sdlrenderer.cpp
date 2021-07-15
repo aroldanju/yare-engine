@@ -19,6 +19,7 @@
 #include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_blendmode.h>
 #include "sdlrenderer.h"
+#include <iostream>
 
 SdlRenderer::SdlRenderer() :
     window(nullptr),
@@ -90,9 +91,30 @@ void SdlRenderer::setColor(uint8_t r, uint8_t g, uint8_t b, uint8_t a) {
 void SdlRenderer::setBlendMode(int mode) {
 	SDL_BlendMode sdlBlendMode;
 	switch (mode) {
-		case 1: sdlBlendMode = SDL_BLENDMODE_MUL; break;
+		case 1: sdlBlendMode = SDL_BLENDMODE_MOD; break;
 		default:
 		case 0: sdlBlendMode = SDL_BLENDMODE_ADD; break;
 	}
 	SDL_SetRenderDrawBlendMode(this->renderer, sdlBlendMode);
+}
+
+void SdlRenderer::drawGradient(int x, int y, int w, int h, uint8_t r0, uint8_t g0, uint8_t b0, uint8_t r1, uint8_t g1, uint8_t b1)   {
+    float rStep, gStep, bStep;
+
+    float r = r0;
+    float g = g0;
+    float b = b0;
+
+    rStep = (float)(r1 - r0) / h;
+    gStep = (float)(g1 - g0) / h;
+    bStep = (float)(b1 - b0) / h;
+
+    for (int i = 0; i < h; i++) {
+        setColor(r, g, b);
+        drawLine(x, y + i, x + w, y + i);
+
+        r += rStep;
+        g += gStep;
+        b += bStep;
+    }
 }
